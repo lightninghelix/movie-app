@@ -1,0 +1,15 @@
+{
+  "name": "movieapp",
+  "version": "1.0.0",
+  "description": "An app to display movie information and reviews",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jay Zuidema",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
+}
