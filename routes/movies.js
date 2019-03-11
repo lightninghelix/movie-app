@@ -1,6 +1,7 @@
 const express = require("express"),
       router = express.Router(),
-      Movie = require("../models/movie");
+      Movie = require("../models/movie"),
+      middleware = require("../middleware");
 
 router.get("/", function(req, res) {
    Movie.find({}, function(err, foundMovies) {
@@ -12,7 +13,7 @@ router.get("/", function(req, res) {
    });
 });
 
-router.post("/", function(req, res) {
+router.post("/", middleware.isLoggedIn, function(req, res) {
     var title = req.body.title;
     var director = req.body.director;
     var poster = req.body.poster;
@@ -36,14 +37,15 @@ router.post("/", function(req, res) {
     });
 });
 
-router.get("/new", function(req, res){
+router.get("/new", middleware.isLoggedIn, function(req, res){
    res.render("movies/new"); 
 });
 
 router.get("/:id", function(req, res) {
     Movie.findById(req.params.id).populate("reviews").exec(function(err, foundMovie) {
-       if (err) {
-           console.log(err);
+       if (err || !foundMovie) {
+           req.flash("error", "Movie not found");
+           res.redirect("back");
        } else {
            res.render("movies/show", {movie: foundMovie});
        }
