@@ -1,17 +1,22 @@
-const express = require("express"),
-      router = express.Router(),
+const express  = require("express"),
+      router   = express.Router(),
       passport = require("passport"),
-      User = require("../models/user");
+      User     = require("../models/user"),
+      MovieDB  = require('moviedb')(process.env.MOVIEDB_API_KEY);
 
 router.get("/", function(req, res) {
     res.render("landing");
 });
 
-router.get("/search", function (req, res) {
-   res.render("search"); 
+router.post("/search", function (req, res) {
+    let results = [];
+    MovieDB.searchMovie({ query: req.body.term }, (err, result) => {
+        // console.log(res.results[0]);
+        results = result.results;
+        console.log(results);
+        res.render("results", {results: results});
+    });
 });
-
-
 
 router.get("/register", function(req, res) {
     res.render("register");
