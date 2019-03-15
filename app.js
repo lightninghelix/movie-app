@@ -7,11 +7,7 @@ const express        = require("express"),
       methodOverride = require("method-override"),
       flash          = require("connect-flash"),
       User           = require("./models/user");
-      
-const movieRoutes    = require("./routes/movies"),
-      reviewRoutes   = require("./routes/reviews"),
-      indexRoutes    = require("./routes/index");
-      
+    
 require('dotenv').config();
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});    
 app.use(bodyParser.urlencoded({extended: true}));
@@ -34,9 +30,13 @@ passport.deserializeUser(User.deserializeUser());
 app.use(function(req, res, next) {
    res.locals.currentUser = req.user;
    res.locals.error = req.flash("error");
-   res.locals.success = req.flash("success");
+   res.locals.success = req.flash("sxuccess");
    next();
 });
+
+const movieRoutes    = require("./routes/movies"),
+      reviewRoutes   = require("./routes/reviews"),
+      indexRoutes    = require("./routes/index");
 
 app.use(indexRoutes);
 app.use("/movies", movieRoutes);
