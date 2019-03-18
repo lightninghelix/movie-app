@@ -2,9 +2,11 @@ var mongoose = require("mongoose");
 
 var movieSchema = new mongoose.Schema({
     title: String,
+    id: Number,
     director: String,
     release_year: Number,
-    poster: String,
+    posterLarge: String,
+    posterSmall: String,
     synopsis: String,
     reviews: [
         {

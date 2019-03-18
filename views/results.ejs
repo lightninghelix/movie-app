@@ -2,8 +2,26 @@
 
 <% results.forEach(result => { %>
     <p>
-        <%=result.title%>
+        <img src="<%= result.posterSmall %>">
+        <a href="/movies/<%= result.id %>"><%= result.title %></a>
     </p>
 <% }) %>
+
+<p>If the movie you searched for is not listed above, it is not currently in our database. 
+   In order to add it, click the add to database button on the correct result below.</p>
+
+<% TMDBResults.forEach(result => { %>
+    <p>
+        <img src="http://image.tmdb.org/t/p/w92<%= result.poster_path %>">
+        <a href="/movies/<%= result._id %>"><%= result.title %></a>
+    </p>
+    <p>
+        <form action="/movies" method="POST">
+            <button type="submit" name="id" value="<%= result.id %>">
+            Add to Database
+            </button>
+        </form>
+    </p>
+<% }) %>   
 
 <% include ./partials/footer %>
