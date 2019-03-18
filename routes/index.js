@@ -2,6 +2,7 @@ const express  = require("express"),
       router   = express.Router(),
       passport = require("passport"),
       User     = require("../models/user"),
+      Movie    = require("../models/movie"),
       MovieDB  = require('moviedb')(process.env.MOVIEDB_API_KEY);
 
 router.get("/", function(req, res) {
@@ -9,12 +10,17 @@ router.get("/", function(req, res) {
 });
 
 router.post("/search", function (req, res) {
-    let results = [];
-    MovieDB.searchMovie({ query: req.body.term }, (err, result) => {
-        // console.log(res.results[0]);
-        results = result.results;
-        console.log(results);
-        res.render("results", {results: results});
+    const regex = new RegExp(req.body.term, "i");
+    Movie.find({title: regex}, function(err, results) {
+        if (err) {
+            req.flash("error", "Movie not found");
+            return res.redirect("/");
+        } else {
+            MovieDB.searchMovie({ query: req.body.term }, (err, result) => {
+                let TMBDResults = result.results;
+                res.render("results", {results: results, TMDBResults: TMBDResults});
+            });
+        }
     });
 });
 
@@ -41,14 +47,14 @@ router.get("/login", function(req, res) {
 
 router.post("/login", passport.authenticate("local", 
     {
-        successRedirect: "/movies",
+        successRedirect: "/",
         failureRedirect: "/login"
     }), function(req, res) {
 });
 
 router.get("/logout", function(req, res){
    req.logout();
-   res.redirect("/movies"); 
+   res.redirect("/movies");
 });
 
 module.exports = router;

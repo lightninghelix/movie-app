@@ -30,7 +30,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                   review.save();
                   movie.reviews.push(review);
                   movie.save();
-                  res.redirect("/movies/" + movie._id);
+                  res.redirect("/movies/" + movie.id);
               }
            });
        }
